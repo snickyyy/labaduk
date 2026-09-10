@@ -18,4 +18,7 @@ Route::prefix('{locale}')
     ->group(function (): void {
         Route::get('/', HomeController::class)->name('home');
         Route::get('/about', AboutController::class)->name('about');
+        Route::view('/visit-rules', 'landing.pages.visit-rules')->name('visit-rules');
+        Route::view('/appointment', 'landing.pages.appointment')->name('appointments.create');
+        Route::view('/appointment/confirmation', 'landing.pages.appointment-confirmation')->name('appointments.confirmation');
     });

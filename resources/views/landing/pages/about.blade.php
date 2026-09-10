@@ -76,6 +76,6 @@
         <span class="about-cta__label">Come as you are</span>
         <h2 id="about-cta-title">Want to get to know us <em>up close?</em></h2>
         <p>Book a visit, step into the rehearsal room and see how the noise comes together.</p>
-        <a href="#">Book a visit <span aria-hidden="true">↗</span></a>
+        <a href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}">Book a visit <span aria-hidden="true">↗</span></a>
     </section>
 @endsection

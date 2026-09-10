@@ -14,15 +14,15 @@
         <link rel="canonical" href="{{ url()->current() }}">
 
         @foreach (config('landing.supported_locales') as $locale)
-            <link rel="alternate" hreflang="{{ $locale }}" href="{{ route(request()->route()->getName(), [...request()->route()->parameters(), 'locale' => $locale]) }}">
+            <link rel="alternate" hreflang="{{ $locale }}" href="{{ route(request()->route()->getName(), ['locale' => $locale]) }}">
         @endforeach
-        <link rel="alternate" hreflang="x-default" href="{{ route(request()->route()->getName(), [...request()->route()->parameters(), 'locale' => config('landing.default_locale')]) }}">
+        <link rel="alternate" hreflang="x-default" href="{{ route(request()->route()->getName(), ['locale' => config('landing.default_locale')]) }}">
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-        @vite('resources/css/landing/index.css')
+        @vite(['resources/css/landing/index.css', 'resources/js/app.js'])
     </head>
     <body>
         <x-landing.navigation />

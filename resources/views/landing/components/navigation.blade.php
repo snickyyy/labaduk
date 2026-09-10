@@ -10,7 +10,7 @@
                 <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#gear">{{ __('landing.nav.gear') }}</a>
                 <a @class(['is-active' => request()->routeIs('landing.home')]) href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#lessons" @if(request()->routeIs('landing.home')) aria-current="page" @endif>{{ __('landing.nav.lessons') }}</a>
                 <a @class(['is-active' => request()->routeIs('landing.about')]) href="{{ route('landing.about', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.about')) aria-current="page" @endif>About</a>
-                <span>{{ __('landing.nav.tours') }}</span>
+                <a @class(['is-active' => request()->routeIs('landing.visit-rules')]) href="{{ route('landing.visit-rules', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.visit-rules')) aria-current="page" @endif>Visit rules</a>
             </div>
         </div>
 
@@ -24,7 +24,7 @@
             <div class="landing-languages" aria-label="{{ __('landing.locale.label') }}">
                 @foreach (config('landing.supported_locales') as $locale)
                     <a
-                        href="{{ route(request()->route()->getName(), [...request()->route()->parameters(), 'locale' => $locale]) }}"
+                        href="{{ route(request()->route()->getName(), ['locale' => $locale]) }}"
                         hreflang="{{ $locale }}"
                         @if ($locale === app()->getLocale()) aria-current="true" @endif
                     >
@@ -32,7 +32,9 @@
                     </a>
                 @endforeach
             </div>
-            <span class="landing-button">{{ __('landing.nav.subscribe') }}</span>
+            <a class="landing-button" href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}">
+                {{ __('landing.nav.book_visit') }}
+            </a>
 
             <details class="landing-menu">
                 <summary aria-label="{{ __('landing.nav.menu') }}">
@@ -45,10 +47,11 @@
                     <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#gear">{{ __('landing.nav.gear') }}</a>
                     <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#lessons">{{ __('landing.nav.lessons') }}</a>
                     <a href="{{ route('landing.about', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.about')) aria-current="page" @endif>About</a>
-                    <span>{{ __('landing.nav.tours') }}</span>
+                    <a href="{{ route('landing.visit-rules', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.visit-rules')) aria-current="page" @endif>Visit rules</a>
+                    <a href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.appointments.*')) aria-current="page" @endif>{{ __('landing.nav.book_visit') }}</a>
                     @foreach (config('landing.supported_locales') as $locale)
                         <a
-                            href="{{ route(request()->route()->getName(), [...request()->route()->parameters(), 'locale' => $locale]) }}"
+                            href="{{ route(request()->route()->getName(), ['locale' => $locale]) }}"
                             hreflang="{{ $locale }}"
                             @if ($locale === app()->getLocale()) aria-current="true" @endif
                         >
