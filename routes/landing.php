@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Landing\AboutController;
 use App\Http\Controllers\Landing\HomeController;
 use App\Http\Middleware\SetLandingLocale;
 use Illuminate\Support\Facades\Route;
@@ -16,4 +17,5 @@ Route::prefix('{locale}')
     ->name('landing.')
     ->group(function (): void {
         Route::get('/', HomeController::class)->name('home');
+        Route::get('/about', AboutController::class)->name('about');
     });

@@ -6,9 +6,10 @@
             </a>
 
             <div class="landing-nav__links">
-                <a href="#archive">{{ __('landing.nav.archive') }}</a>
-                <a href="#gear">{{ __('landing.nav.gear') }}</a>
-                <a class="is-active" href="#lessons" aria-current="page">{{ __('landing.nav.lessons') }}</a>
+                <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#archive">{{ __('landing.nav.archive') }}</a>
+                <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#gear">{{ __('landing.nav.gear') }}</a>
+                <a @class(['is-active' => request()->routeIs('landing.home')]) href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#lessons" @if(request()->routeIs('landing.home')) aria-current="page" @endif>{{ __('landing.nav.lessons') }}</a>
+                <a @class(['is-active' => request()->routeIs('landing.about')]) href="{{ route('landing.about', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.about')) aria-current="page" @endif>About</a>
                 <span>{{ __('landing.nav.tours') }}</span>
             </div>
         </div>
@@ -40,9 +41,10 @@
                     </svg>
                 </summary>
                 <div class="landing-menu__panel">
-                    <a href="#archive">{{ __('landing.nav.archive') }}</a>
-                    <a href="#gear">{{ __('landing.nav.gear') }}</a>
-                    <a href="#lessons">{{ __('landing.nav.lessons') }}</a>
+                    <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#archive">{{ __('landing.nav.archive') }}</a>
+                    <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#gear">{{ __('landing.nav.gear') }}</a>
+                    <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#lessons">{{ __('landing.nav.lessons') }}</a>
+                    <a href="{{ route('landing.about', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.about')) aria-current="page" @endif>About</a>
                     <span>{{ __('landing.nav.tours') }}</span>
                     @foreach (config('landing.supported_locales') as $locale)
                         <a
