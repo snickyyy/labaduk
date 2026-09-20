@@ -35,10 +35,6 @@ class AppointmentsTable
                     ->label('Начало')
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
-                TextColumn::make('end_at')
-                    ->label('Конец')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
                 TextColumn::make('status')
                     ->label('Статус')
                     ->badge(),

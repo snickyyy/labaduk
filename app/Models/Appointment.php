@@ -15,12 +15,12 @@ use Illuminate\Support\Carbon;
  * @property string $email
  * @property string $phone_number
  * @property Carbon $start_at
- * @property Carbon $end_at
+ * @property Carbon|null $end_at
  * @property AppointmentStatus $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['first_name', 'last_name', 'email', 'phone_number', 'start_at', 'end_at', 'status'])]
+#[Fillable(['first_name', 'last_name', 'email', 'phone_number', 'start_at', 'status'])]
 class Appointment extends Model
 {
     use HasUuids;

@@ -25,7 +25,6 @@ class StoreAppointmentRequest extends FormRequest
             'email' => ['required', 'email', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
             'start_at' => ['required', 'date'],
-            'end_at' => ['required', 'date', 'after:start_at'],
         ];
     }
 }

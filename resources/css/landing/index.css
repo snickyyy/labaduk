@@ -1397,6 +1397,10 @@ main {
     min-width: 0;
 }
 
+.appointment-field--full {
+    grid-column: 1 / -1;
+}
+
 .appointment-field label {
     display: flex;
     justify-content: space-between;
@@ -1432,6 +1436,63 @@ main {
 .appointment-field input[aria-invalid="true"] {
     border-color: var(--landing-red);
     box-shadow: inset 4px 0 0 var(--landing-red);
+}
+
+.appointment-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    min-height: 54px;
+}
+
+.appointment-slots__message {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 15px 14px;
+    border: 1px solid var(--landing-border);
+    background: var(--landing-white);
+    color: var(--landing-muted);
+    font-size: 0.875rem;
+}
+
+.appointment-slot {
+    min-height: 52px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.appointment-slot.is-available {
+    background: #d9f1e2;
+    color: #126339;
+}
+
+.appointment-slot.is-available:hover,
+.appointment-slot.is-available:focus-visible,
+.appointment-slot.is-available.is-selected {
+    background: #126339;
+    color: var(--landing-white);
+}
+
+.appointment-slot.is-booked {
+    border-color: var(--landing-red);
+    background: #f6d9da;
+    color: var(--landing-red);
+    cursor: not-allowed;
+    opacity: 1;
+    text-decoration: line-through;
+}
+
+.appointment-slot.is-unavailable {
+    border-color: var(--landing-border);
+    background: var(--landing-bone);
+    color: var(--landing-muted);
+    cursor: not-allowed;
+    opacity: 1;
 }
 
 .appointment-field__error {

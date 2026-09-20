@@ -23,7 +23,6 @@ class AppointmentResource extends JsonResource
             'email' => $this->email,
             'phone_number' => $this->phone_number,
             'start_at' => $this->start_at->toIso8601String(),
-            'end_at' => $this->end_at->toIso8601String(),
             'status' => $this->status->value,
             'created_at' => $this->created_at?->toIso8601String(),
         ];

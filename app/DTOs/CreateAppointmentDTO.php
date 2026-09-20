@@ -9,7 +9,6 @@ final readonly class CreateAppointmentDTO
 {
     /**
      * @param  CarbonImmutable  $startAt  начало записи, нормализованное к UTC
-     * @param  CarbonImmutable  $endAt  конец записи, нормализованное к UTC
      */
     public function __construct(
         public string $firstName,
@@ -17,7 +16,6 @@ final readonly class CreateAppointmentDTO
         public string $email,
         public string $phoneNumber,
         public CarbonImmutable $startAt,
-        public CarbonImmutable $endAt,
     ) {}
 
     public static function fromRequest(StoreAppointmentRequest $request): self
@@ -28,7 +26,6 @@ final readonly class CreateAppointmentDTO
             email: (string) $request->validated('email'),
             phoneNumber: (string) $request->validated('phone_number'),
             startAt: CarbonImmutable::parse((string) $request->validated('start_at'))->utc(),
-            endAt: CarbonImmutable::parse((string) $request->validated('end_at'))->utc(),
         );
     }
 
@@ -43,7 +40,6 @@ final readonly class CreateAppointmentDTO
             'email' => $this->email,
             'phone_number' => $this->phoneNumber,
             'start_at' => $this->startAt,
-            'end_at' => $this->endAt,
         ];
     }
 }

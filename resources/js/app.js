@@ -3,38 +3,137 @@ const appointmentForm = document.querySelector('[data-appointment-form]');
 if (appointmentForm instanceof HTMLFormElement) {
     const submitButton = appointmentForm.querySelector('[type="submit"]');
     const formMessage = appointmentForm.querySelector('[data-form-message]');
+    const dateInput = appointmentForm.querySelector('[data-appointment-date]');
+    const slotsContainer = appointmentForm.querySelector('[data-appointment-slots]');
     const startInput = appointmentForm.elements.namedItem('start_at');
-    const endInput = appointmentForm.elements.namedItem('end_at');
+    const phoneInput = appointmentForm.querySelector('[data-phone-input]');
 
-    const dateTimeInputs = [startInput, endInput].filter(
-        (input) => input instanceof HTMLInputElement,
-    );
+    const utcToday = () => new Date().toISOString().slice(0, 10);
 
-    const roundUpToQuarterHour = (date) => {
-        const rounded = new Date(date);
-        rounded.setUTCSeconds(0, 0);
-        rounded.setUTCMinutes(Math.ceil(rounded.getUTCMinutes() / 15) * 15);
-
-        return rounded;
+    const setSlotsMessage = (message) => {
+        if (slotsContainer instanceof HTMLElement) {
+            slotsContainer.replaceChildren();
+            const element = document.createElement('p');
+            element.className = 'appointment-slots__message';
+            element.textContent = message;
+            slotsContainer.append(element);
+        }
     };
 
-    const toDateTimeLocalValue = (date) => date.toISOString().slice(0, 16);
+    const showStartError = (message) => {
+        const error = appointmentForm.querySelector('[data-field-error="start_at"]');
 
-    const now = roundUpToQuarterHour(new Date());
+        if (startInput instanceof HTMLInputElement) {
+            startInput.setAttribute('aria-invalid', 'true');
+        }
 
-    dateTimeInputs.forEach((input) => {
-        input.min = toDateTimeLocalValue(now);
-    });
+        if (error instanceof HTMLElement) {
+            error.textContent = message;
+        }
+    };
 
-    if (startInput instanceof HTMLInputElement && endInput instanceof HTMLInputElement) {
-        startInput.addEventListener('change', () => {
-            endInput.min = startInput.value || toDateTimeLocalValue(now);
+    const renderSlots = (slots) => {
+        if (!(slotsContainer instanceof HTMLElement) || !(startInput instanceof HTMLInputElement)) {
+            return;
+        }
 
-            if (startInput.value && (!endInput.value || endInput.value <= startInput.value)) {
-                const suggestedEnd = new Date(`${startInput.value}:00Z`);
-                suggestedEnd.setUTCHours(suggestedEnd.getUTCHours() + 1);
-                endInput.value = toDateTimeLocalValue(suggestedEnd);
+        slotsContainer.replaceChildren();
+
+        if (!slots.length) {
+            setSlotsMessage('There are no appointment times for this date.');
+            return;
+        }
+
+        slots.forEach((slot) => {
+            const button = document.createElement('button');
+            const isUnavailable = slot.is_booked || slot.is_past;
+
+            button.type = 'button';
+            button.className = 'appointment-slot';
+            button.textContent = slot.time;
+            button.disabled = isUnavailable;
+            button.dataset.startAt = slot.start_at;
+
+            if (slot.is_booked) {
+                button.classList.add('is-booked');
+                button.setAttribute('aria-label', `${slot.time}, booked`);
+            } else if (slot.is_past) {
+                button.classList.add('is-unavailable');
+                button.setAttribute('aria-label', `${slot.time}, no longer available`);
+            } else {
+                button.classList.add('is-available');
+                button.setAttribute('aria-label', `${slot.time}, available`);
+                button.addEventListener('click', () => {
+                    slotsContainer.querySelectorAll('.appointment-slot.is-selected').forEach((selected) => {
+                        selected.classList.remove('is-selected');
+                        selected.removeAttribute('aria-pressed');
+                    });
+                    button.classList.add('is-selected');
+                    button.setAttribute('aria-pressed', 'true');
+                    startInput.value = slot.start_at;
+                    startInput.removeAttribute('aria-invalid');
+
+                    const error = appointmentForm.querySelector('[data-field-error="start_at"]');
+                    if (error instanceof HTMLElement) {
+                        error.textContent = '';
+                    }
+                });
             }
+
+            slotsContainer.append(button);
+        });
+    };
+
+    const loadSlots = async () => {
+        if (!(dateInput instanceof HTMLInputElement) || !(startInput instanceof HTMLInputElement)) {
+            return;
+        }
+
+        startInput.value = '';
+
+        if (!dateInput.value) {
+            setSlotsMessage('Choose a date to see available times.');
+            return;
+        }
+
+        setSlotsMessage('Loading available times…');
+
+        try {
+            const url = new URL(appointmentForm.dataset.slotsUrl, window.location.origin);
+            url.searchParams.set('date', dateInput.value);
+
+            const response = await fetch(url, { headers: { Accept: 'application/json' } });
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok || !Array.isArray(result.data?.slots)) {
+                throw new Error('Could not load appointment slots.');
+            }
+
+            renderSlots(result.data.slots);
+        } catch {
+            setSlotsMessage('We could not load times for this date. Please try again.');
+        }
+    };
+
+    if (dateInput instanceof HTMLInputElement) {
+        dateInput.min = utcToday();
+        dateInput.value = utcToday();
+        dateInput.addEventListener('change', loadSlots);
+        loadSlots();
+    }
+
+    if (phoneInput instanceof HTMLInputElement) {
+        phoneInput.addEventListener('input', () => {
+            const hasCountryPrefix = phoneInput.value.trim().startsWith('+');
+            const digits = phoneInput.value.replace(/\D/g, '');
+
+            if (!hasCountryPrefix || digits.length < 3) {
+                phoneInput.value = hasCountryPrefix ? `+${digits}` : digits;
+                return;
+            }
+
+            const countryCodeLength = digits.startsWith('49') ? 2 : 1;
+            phoneInput.value = `+${digits.slice(0, countryCodeLength)} ${digits.slice(countryCodeLength)}`;
         });
     }
 
@@ -72,13 +171,16 @@ if (appointmentForm instanceof HTMLFormElement) {
         firstInvalidField?.focus();
     };
 
-    const toUtcIsoString = (value) => new Date(`${value}:00Z`).toISOString();
-
     appointmentForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         clearErrors();
 
         if (!appointmentForm.reportValidity()) {
+            return;
+        }
+
+        if (!(startInput instanceof HTMLInputElement) || !startInput.value) {
+            showStartError('Choose one available time.');
             return;
         }
 
@@ -88,9 +190,6 @@ if (appointmentForm instanceof HTMLFormElement) {
 
         const formData = new FormData(appointmentForm);
         const payload = Object.fromEntries(formData.entries());
-
-        payload.start_at = toUtcIsoString(payload.start_at);
-        payload.end_at = toUtcIsoString(payload.end_at);
 
         submitButton.disabled = true;
         submitButton.setAttribute('aria-busy', 'true');
@@ -118,6 +217,10 @@ if (appointmentForm instanceof HTMLFormElement) {
             if (response.status === 422 && result.errors) {
                 showValidationErrors(result.errors);
                 formMessage.textContent = 'Please check the highlighted fields.';
+
+                if (result.errors.start_at) {
+                    loadSlots();
+                }
             } else {
                 formMessage.textContent = 'We could not complete your booking. Please try again.';
             }

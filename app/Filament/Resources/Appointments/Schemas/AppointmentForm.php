@@ -31,12 +31,8 @@ class AppointmentForm
                 DateTimePicker::make('start_at')
                     ->label('Начало')
                     ->seconds(false)
+                    ->minutesStep(60)
                     ->required(),
-                DateTimePicker::make('end_at')
-                    ->label('Конец')
-                    ->seconds(false)
-                    ->required()
-                    ->rules(['after:start_at']),
                 Select::make('status')
                     ->label('Статус')
                     ->options(AppointmentStatus::class)
