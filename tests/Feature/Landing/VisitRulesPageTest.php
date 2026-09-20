@@ -6,14 +6,19 @@ use Tests\TestCase;
 
 class VisitRulesPageTest extends TestCase
 {
-    public function test_visit_rules_page_renders_all_twelve_rules(): void
+    public function test_rehearsal_room_rules_page_renders_all_rule_groups(): void
     {
         $this->get('/en/visit-rules')
             ->assertOk()
-            ->assertSee('Visit rules')
-            ->assertSee('Arrive on time')
-            ->assertSee('Protect your hearing')
-            ->assertSee('Leave it as found')
-            ->assertSee('12');
+            ->assertSee('Room')
+            ->assertSee('rules.')
+            ->assertSee('Before you play.')
+            ->assertSee('Please use hand sanitiser before rehearsing.')
+            ->assertSee('General')
+            ->assertSee('Guitars & amplifiers')
+            ->assertSee('Electronics & tech')
+            ->assertSee('Before you leave.')
+            ->assertSee('The rehearsal room is no place for carelessness.')
+            ->assertSee('Report it.');
     }
 }

@@ -1,100 +1,193 @@
 @extends('landing.layouts.app')
 
-@section('title', 'Visit Rules — Slash Editorial')
-@section('description', 'Twelve simple rules for a safe, focused and enjoyable visit to the Slash Editorial rehearsal room.')
+@section('title', __('rulesPage.meta.title'))
+@section('description', __('rulesPage.meta.description'))
 
 @section('content')
     @php
-        $rules = [
-            ['title' => 'Arrive on time', 'text' => 'Come 10 minutes before your slot so we can start without rushing.', 'icon' => 'clock'],
-            ['title' => 'Check in first', 'text' => 'Meet your host at the entrance. Please do not enter the rehearsal area alone.', 'icon' => 'door'],
-            ['title' => 'Bring your ID', 'text' => 'We may ask to confirm the name used for your booking.', 'icon' => 'card'],
-            ['title' => 'Wear closed shoes', 'text' => 'Cables, stands and heavy cases make open footwear unsafe in the room.', 'icon' => 'shoe'],
-            ['title' => 'Protect your hearing', 'text' => 'Use the earplugs provided whenever the full band is playing.', 'icon' => 'ear'],
-            ['title' => 'Keep drinks capped', 'text' => 'Water is welcome. Keep all drinks closed and away from equipment.', 'icon' => 'bottle'],
-            ['title' => 'No food inside', 'text' => 'Please finish snacks before entering the rehearsal space.', 'icon' => 'food'],
-            ['title' => 'Ask before touching', 'text' => 'Instruments, pedals and amplifiers are handled only with permission.', 'icon' => 'hand'],
-            ['title' => 'Photos by consent', 'text' => 'Ask everyone in the room before taking a photo or recording video.', 'icon' => 'camera'],
-            ['title' => 'Silence your phone', 'text' => 'Keep notifications and calls off while a rehearsal or lesson is running.', 'icon' => 'phone'],
-            ['title' => 'Respect the room', 'text' => 'No smoking, vaping, aggressive behaviour or discriminatory language.', 'icon' => 'heart'],
-            ['title' => 'Leave it as found', 'text' => 'Take your belongings and put borrowed protection in the marked bin.', 'icon' => 'spark'],
+        $sections = [
+            [
+                'number' => __('rulesPage.sections.general.number'),
+                'label' => __('rulesPage.sections.general.label'),
+                'heading' => __('rulesPage.sections.general.heading'),
+                'items' => [
+                    __('rulesPage.sections.general.items.care_for_room'),
+                    __('rulesPage.sections.general.items.leave_as_found'),
+                    __('rulesPage.sections.general.items.no_misuse'),
+                    __('rulesPage.sections.general.items.damage_liability'),
+                ],
+            ],
+            [
+                'number' => __('rulesPage.sections.drums.number'),
+                'label' => __('rulesPage.sections.drums.label'),
+                'heading' => __('rulesPage.sections.drums.heading'),
+                'items' => [
+                    __('rulesPage.sections.drums.items.no_excessive_force'),
+                    __('rulesPage.sections.drums.items.stool_only_when_playing'),
+                    __('rulesPage.sections.drums.items.return_every_part'),
+                    __('rulesPage.sections.drums.items.keep_items_away'),
+                ],
+            ],
+            [
+                'number' => __('rulesPage.sections.guitars.number'),
+                'label' => __('rulesPage.sections.guitars.label'),
+                'heading' => __('rulesPage.sections.guitars.heading'),
+                'items' => [
+                    __('rulesPage.sections.guitars.items.return_all_guitars'),
+                    __('rulesPage.sections.guitars.items.do_not_lay_down'),
+                    __('rulesPage.sections.guitars.items.mute_before_cables'),
+                    __('rulesPage.sections.guitars.items.no_max_volume'),
+                    __('rulesPage.sections.guitars.items.keep_cables_clear'),
+                ],
+            ],
+            [
+                'number' => __('rulesPage.sections.technology.number'),
+                'label' => __('rulesPage.sections.technology.label'),
+                'heading' => __('rulesPage.sections.technology.heading'),
+                'items' => [
+                    __('rulesPage.sections.technology.items.check_connections'),
+                    __('rulesPage.sections.technology.items.no_damaged_cables'),
+                    __('rulesPage.sections.technology.items.never_pull_cables'),
+                    __('rulesPage.sections.technology.items.switch_everything_off'),
+                    __('rulesPage.sections.technology.items.report_malfunctions'),
+                ],
+            ],
+            [
+                'number' => __('rulesPage.sections.microphones.number'),
+                'label' => __('rulesPage.sections.microphones.label'),
+                'heading' => __('rulesPage.sections.microphones.heading'),
+                'items' => [
+                    __('rulesPage.sections.microphones.items.do_not_drop'),
+                    __('rulesPage.sections.microphones.items.stands_stable'),
+                    __('rulesPage.sections.microphones.items.return_after_use'),
+                    __('rulesPage.sections.microphones.items.do_not_adjust'),
+                ],
+            ],
+            [
+                'number' => __('rulesPage.sections.food_drink.number'),
+                'label' => __('rulesPage.sections.food_drink.label'),
+                'heading' => __('rulesPage.sections.food_drink.heading'),
+                'items' => [
+                    __('rulesPage.sections.food_drink.items.keep_drinks_away'),
+                    __('rulesPage.sections.food_drink.items.no_drinks_on_equipment'),
+                    __('rulesPage.sections.food_drink.items.no_litter'),
+                    __('rulesPage.sections.food_drink.items.clean_spills'),
+                ],
+            ],
+            [
+                'number' => __('rulesPage.sections.volume.number'),
+                'label' => __('rulesPage.sections.volume.label'),
+                'heading' => __('rulesPage.sections.volume.heading'),
+                'items' => [
+                    __('rulesPage.sections.volume.items.no_dangerous_volume'),
+                    __('rulesPage.sections.volume.items.respect_neighbours'),
+                    __('rulesPage.sections.volume.items.listen_to_requests'),
+                ],
+            ],
+        ];
+
+        $checklist = [
+            __('rulesPage.after_rehearsal.items.dispose_waste'),
+            __('rulesPage.after_rehearsal.items.return_guitars'),
+            __('rulesPage.after_rehearsal.items.leave_drums_orderly'),
+            __('rulesPage.after_rehearsal.items.coil_cables'),
+            __('rulesPage.after_rehearsal.items.return_microphones'),
+            __('rulesPage.after_rehearsal.items.switch_off_technology'),
+            __('rulesPage.after_rehearsal.items.check_lights_power'),
+            __('rulesPage.after_rehearsal.items.lock_room'),
+        ];
+
+        $finalActions = [
+            __('rulesPage.final_rule.actions.report_damage'),
+            __('rulesPage.final_rule.actions.clean_mess'),
+            __('rulesPage.final_rule.actions.return_items'),
+            __('rulesPage.final_rule.actions.restore_settings'),
         ];
     @endphp
 
-    <section class="visit-rules" aria-labelledby="visit-rules-title">
-        <header class="visit-rules__intro">
-            <div class="visit-rules__heading">
-                <span class="visit-rules__eyebrow">Before you step inside</span>
-                <h1 id="visit-rules-title">Visit<br><em>rules</em></h1>
-            </div>
+    <article class="room-rules">
+        <header class="room-rules__hero">
+            <div class="room-rules__shell room-rules__hero-layout">
+                <div>
+                    <p class="room-rules__eyebrow">{{ __('rulesPage.hero.eyebrow') }}</p>
+                    <h1 id="room-rules-title">
+                        <span>{{ __('rulesPage.hero.title_line_one') }}</span>
+                        <span>{{ __('rulesPage.hero.title_line_two') }}</span>
+                    </h1>
+                </div>
 
-            <div class="visit-rules__count" aria-hidden="true">
-                <span>12</span>
-                <svg viewBox="0 0 160 160">
-                    <circle cx="80" cy="80" r="69"></circle>
-                    <path d="M80 0v22M80 138v22M0 80h22M138 80h22"></path>
-                </svg>
+                <p class="room-rules__intro">{{ __('rulesPage.hero.description') }}</p>
             </div>
-
-            <p>Simple habits keep the room safe, the gear working and the focus on the music. Please read these before your visit.</p>
         </header>
 
-        <ol class="visit-rules__grid">
-            @foreach ($rules as $rule)
-                <li class="visit-rule">
-                    <div class="visit-rule__topline">
-                        <span class="visit-rule__number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                        <span class="visit-rule__icon" aria-hidden="true">
-                            @switch($rule['icon'])
-                                @case('clock')
-                                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M12 7v5l3 2"></path></svg>
-                                    @break
-                                @case('door')
-                                    <svg viewBox="0 0 24 24"><path d="M5 21h14M7 21V4l10-1v18M14 12h.01"></path></svg>
-                                    @break
-                                @case('card')
-                                    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"></rect><path d="M3 9h18M7 14h4"></path></svg>
-                                    @break
-                                @case('shoe')
-                                    <svg viewBox="0 0 24 24"><path d="M4 14c3 0 5-2 5-6h4c0 4 3 5 7 7v4H4z"></path></svg>
-                                    @break
-                                @case('ear')
-                                    <svg viewBox="0 0 24 24"><path d="M6 10a6 6 0 0 1 12 0c0 4-4 4-4 8a2 2 0 0 1-4 0M9 11a3 3 0 0 1 6 0c0 2-2 2-2 4"></path></svg>
-                                    @break
-                                @case('bottle')
-                                    <svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v4l-2 3v11h8V10l-2-3V3M8 13h8"></path></svg>
-                                    @break
-                                @case('food')
-                                    <svg viewBox="0 0 24 24"><path d="M4 4l16 16M8 5v6M5 5v4c0 2 2 3 4 3M16 5c-3 2-3 6 0 8v6"></path></svg>
-                                    @break
-                                @case('hand')
-                                    <svg viewBox="0 0 24 24"><path d="M6 12V8a1.5 1.5 0 0 1 3 0v3-5a1.5 1.5 0 0 1 3 0v5-4a1.5 1.5 0 0 1 3 0v4-2a1.5 1.5 0 0 1 3 0v5c0 5-3 7-7 7s-6-2-7-5l-1-3a1.6 1.6 0 0 1 3-1z"></path></svg>
-                                    @break
-                                @case('camera')
-                                    <svg viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v11H3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
-                                    @break
-                                @case('phone')
-                                    <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="1"></rect><path d="M10 18h4M4 4l16 16"></path></svg>
-                                    @break
-                                @case('heart')
-                                    <svg viewBox="0 0 24 24"><path d="M12 20S4 16 4 9a4 4 0 0 1 7-3l1 1 1-1a4 4 0 0 1 7 3c0 7-8 11-8 11z"></path></svg>
-                                    @break
-                                @case('spark')
-                                    <svg viewBox="0 0 24 24"><path d="M12 2c0 6-3 9-9 9 6 0 9 3 9 9 0-6 3-9 9-9-6 0-9-3-9-9z"></path></svg>
-                                    @break
-                            @endswitch
-                        </span>
-                    </div>
-                    <h2>{{ $rule['title'] }}</h2>
-                    <p>{{ $rule['text'] }}</p>
-                </li>
-            @endforeach
-        </ol>
+        <section class="room-rules__important room-rules__shell" aria-labelledby="important-rules-title">
+            <div class="room-rules__important-header">
+                <p>{{ __('rulesPage.important.eyebrow') }}</p>
+                <h2 id="important-rules-title">{{ __('rulesPage.important.heading') }}</h2>
+            </div>
 
-        <footer class="visit-rules__note">
-            <span>One last thing</span>
-            <p>If you feel unwell or cannot make your time, let us know before travelling. We will help you reschedule.</p>
-            <a href="mailto:hello@slasheditorial.com">Ask a question <span aria-hidden="true">↗</span></a>
-        </footer>
-    </section>
+            <ol class="room-rules__important-list">
+                <li>
+                    <span aria-hidden="true">01</span>
+                    <p>{{ __('rulesPage.important.items.use_sanitiser') }}</p>
+                </li>
+                <li>
+                    <span aria-hidden="true">02</span>
+                    <p>{{ __('rulesPage.important.items.bring_change_of_shoes') }}</p>
+                </li>
+            </ol>
+        </section>
+
+        <div class="room-rules__shell room-rules__sections" aria-label="{{ __('rulesPage.sections.label') }}">
+            @foreach ($sections as $section)
+                <section class="room-rules__section" aria-labelledby="room-rules-section-{{ $loop->iteration }}">
+                    <header class="room-rules__section-header">
+                        <p class="room-rules__section-number">{{ $section['number'] }}</p>
+                        <div>
+                            <p class="room-rules__section-label">{{ $section['label'] }}</p>
+                            <h2 id="room-rules-section-{{ $loop->iteration }}">{{ $section['heading'] }}</h2>
+                        </div>
+                    </header>
+
+                    <ol class="room-rules__list">
+                        @foreach ($section['items'] as $item)
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ol>
+                </section>
+            @endforeach
+        </div>
+
+        <section class="room-rules__after" aria-labelledby="after-rehearsal-title">
+            <div class="room-rules__shell room-rules__after-layout">
+                <header>
+                    <p class="room-rules__eyebrow">{{ __('rulesPage.after_rehearsal.eyebrow') }}</p>
+                    <h2 id="after-rehearsal-title">{{ __('rulesPage.after_rehearsal.heading') }}</h2>
+                </header>
+
+                <ol class="room-rules__checklist">
+                    @foreach ($checklist as $item)
+                        <li>{{ $item }}</li>
+                    @endforeach
+                </ol>
+            </div>
+        </section>
+
+        <section class="room-rules__final room-rules__shell" aria-labelledby="final-rule-title">
+            <header>
+                <p class="room-rules__final-label">{{ __('rulesPage.final_rule.eyebrow') }}</p>
+                <h2 id="final-rule-title">{{ __('rulesPage.final_rule.heading') }}</h2>
+            </header>
+
+            <div class="room-rules__final-content">
+                <p class="room-rules__final-lead">{{ __('rulesPage.final_rule.lead') }}</p>
+                <ul>
+                    @foreach ($finalActions as $action)
+                        <li>{{ $action }}</li>
+                    @endforeach
+                </ul>
+                <p class="room-rules__final-support">{{ __('rulesPage.final_rule.support') }}</p>
+            </div>
+        </section>
+    </article>
 @endsection

@@ -5,7 +5,7 @@
 
     <div class="landing-footer__links" aria-label="{{ __('landing.footer.label') }}">
         <span>{{ __('landing.footer.privacy') }}</span>
-        <a href="{{ route('landing.visit-rules', ['locale' => app()->getLocale()]) }}">Visit rules</a>
+        <a href="{{ route('landing.visit-rules', ['locale' => app()->getLocale()]) }}">{{ __('landing.footer.visit_rules') }}</a>
         <span>{{ __('landing.footer.advertise') }}</span>
         <span>{{ __('landing.footer.contact') }}</span>
     </div>
