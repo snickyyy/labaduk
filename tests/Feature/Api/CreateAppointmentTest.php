@@ -162,6 +162,18 @@ class CreateAppointmentTest extends TestCase
         $this->assertDatabaseCount('appointments', 1);
     }
 
+    public function test_appointment_creation_is_rate_limited(): void
+    {
+        foreach (range(1, 5) as $attempt) {
+            $this->postJson('/api/appointments', [])
+                ->assertUnprocessable();
+        }
+
+        $this->postJson('/api/appointments', [])
+            ->assertStatus(429)
+            ->assertHeader('Retry-After');
+    }
+
     public function test_slots_mark_booked_hours_and_available_hours_separately(): void
     {
         $start = $this->next(Carbon::SUNDAY, 10);

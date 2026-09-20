@@ -7,7 +7,9 @@ services:
             POSTGRES_PASSWORD: ${DB_PASSWORD}
             PGDATA: /data/postgres
         ports:
-            - "${DB_PORT}:5432"
+            # PostgreSQL is available to services on this VM, but is not
+            # published on its external network interface.
+            - "127.0.0.1:${DB_PORT:-5432}:5432"
         volumes:
             - db:/data/postgres
 
