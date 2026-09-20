@@ -1,12 +1,13 @@
-# Безопасная установка Labaduk на VM
+# Безопасная установка lingking.space на VM
 
 Конфигурация рассчитана на Debian 13 (Trixie), Nginx, PHP 8.4-FPM, один домен и
 проект в `/var/www/labaduk`. База PostgreSQL может работать через имеющийся
 `docker-compose.yml`; наружу её порт не публикуется.
 
-Перед началом A/AAAA-записи домена должны указывать на VM. Если IPv6 на VM не
-настроен, удалите AAAA-запись, иначе проверка Let's Encrypt может завершиться
-ошибкой.
+Публичный домен приложения — `lingking.space`, дополнительный адрес —
+`www.lingking.space`. Перед началом A/AAAA-записи должны указывать на VM. Если
+IPv6 на VM не настроен, удалите AAAA-запись, иначе проверка сертификата может
+завершиться ошибкой.
 
 ## 1. Подготовить VM
 
@@ -66,7 +67,7 @@ php artisan key:generate
 ```dotenv
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=https://example.com
+APP_URL=https://lingking.space
 LOG_LEVEL=warning
 
 DB_CONNECTION=pgsql
@@ -116,10 +117,26 @@ php artisan optimize
 Если приложению нужны загруженные публичные файлы, один раз выполните
 `php artisan storage:link`.
 
-## 3. Получить TLS-сертификат
+## 3. Подключить lingking.space и получить TLS
 
-Замените `example.com` и `www.example.com` в обоих Nginx-файлах. Если `www`
-не используется, удалите его из `server_name` и команды Certbot.
+Сейчас DNS домена направлен на Vercel. На момент подготовки инструкции
+`lingking.space` отвечает ошибкой Vercel `DEPLOYMENT_NOT_FOUND`, а сертификат
+`www.lingking.space` не проходит проверку.
+
+Сертификат, автоматически выпущенный Vercel, хранится на инфраструктуре Vercel
+и не может быть установлен в Nginx на этой VM. Для текущего варианта, где
+Laravel работает непосредственно на VM, измените DNS в панели Vercel:
+
+- `A` для `@` → публичный IPv4-адрес VM;
+- `AAAA` для `@` → IPv6-адрес VM, только если IPv6 действительно настроен;
+- `CNAME` для `www` → `lingking.space`.
+
+Удалите старые конфликтующие A/AAAA/CNAME-записи. Дождитесь, пока команды
+`dig +short A lingking.space` и `dig +short CNAME www.lingking.space` покажут
+новые значения. Управление DNS можно оставить в Vercel, но TLS для Nginx
+выпускается отдельно.
+
+Сначала включите временный HTTP-конфиг:
 
 ```bash
 sudo mkdir -p /var/www/letsencrypt/.well-known/acme-challenge
@@ -131,7 +148,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 
 sudo certbot certonly --webroot -w /var/www/letsencrypt \
-    -d example.com -d www.example.com
+    -d lingking.space -d www.lingking.space
 ```
 
 Теперь установите финальный HTTPS-конфиг:
@@ -152,9 +169,9 @@ systemctl status certbot.timer
 ## 4. Проверить установку
 
 ```bash
-curl -I http://example.com
-curl -I https://example.com
-curl -i https://example.com/api/appointments/slots?date=2026-09-21
+curl -I http://lingking.space
+curl -I https://lingking.space
+curl -i 'https://lingking.space/api/appointments/slots?date=2026-09-21'
 sudo nginx -t
 sudo systemctl status nginx php8.4-fpm
 ```
@@ -202,7 +219,7 @@ sudo systemctl reload php8.4-fpm
 - HSTS включается только в финальном HTTPS-конфиге. Не добавляйте
   `includeSubDomains` или `preload`, пока все поддомены не переведены на HTTPS.
 - Неизвестные значения `Host` и SNI получают закрытие соединения (`444`), а не
-  ответ приложения. После смены домена обновите все вхождения `example.com`.
+  ответ приложения. Разрешены только `lingking.space` и `www.lingking.space`.
 - CSP совместима с текущими Livewire/Filament-страницами, но содержит
   `unsafe-inline` и `unsafe-eval`. Для более строгой политики потребуется
   nonce/CSP-сборка Livewire и отдельное тестирование интерфейса.
