@@ -5,26 +5,38 @@ if (appointmentForm instanceof HTMLFormElement) {
     const formMessage = appointmentForm.querySelector('[data-form-message]');
     const dateInput = appointmentForm.querySelector('[data-appointment-date]');
     const slotsContainer = appointmentForm.querySelector('[data-appointment-slots]');
+    const durationsContainer = appointmentForm.querySelector('[data-appointment-durations]');
+    const summary = appointmentForm.querySelector('[data-appointment-summary]');
     const startInput = appointmentForm.elements.namedItem('start_at');
+    const durationInput = appointmentForm.elements.namedItem('duration_minutes');
     const phoneInput = appointmentForm.querySelector('[data-phone-input]');
+    let selectedSlot = null;
 
-    const utcToday = () => new Date().toISOString().slice(0, 10);
-
-    const setSlotsMessage = (message) => {
-        if (slotsContainer instanceof HTMLElement) {
-            slotsContainer.replaceChildren();
-            const element = document.createElement('p');
-            element.className = 'appointment-slots__message';
-            element.textContent = message;
-            slotsContainer.append(element);
-        }
+    const durationLabels = {
+        30: '30 minutes',
+        60: '1 hour',
+        90: '1 hour 30 minutes',
+        120: '2 hours',
     };
 
-    const showStartError = (message) => {
-        const error = appointmentForm.querySelector('[data-field-error="start_at"]');
+    const replaceWithMessage = (container, message) => {
+        if (!(container instanceof HTMLElement)) {
+            return;
+        }
 
-        if (startInput instanceof HTMLInputElement) {
-            startInput.setAttribute('aria-invalid', 'true');
+        container.replaceChildren();
+        const element = document.createElement('p');
+        element.className = 'appointment-slots__message';
+        element.textContent = message;
+        container.append(element);
+    };
+
+    const showFieldError = (field, message) => {
+        const input = appointmentForm.elements.namedItem(field);
+        const error = appointmentForm.querySelector(`[data-field-error="${field}"]`);
+
+        if (input instanceof HTMLInputElement) {
+            input.setAttribute('aria-invalid', 'true');
         }
 
         if (error instanceof HTMLElement) {
@@ -32,71 +44,177 @@ if (appointmentForm instanceof HTMLFormElement) {
         }
     };
 
-    const renderSlots = (slots) => {
+    const resetSummary = () => {
+        if (summary instanceof HTMLElement) {
+            summary.hidden = true;
+        }
+    };
+
+    const resetDuration = () => {
+        if (durationInput instanceof HTMLInputElement) {
+            durationInput.value = '';
+        }
+
+        resetSummary();
+        replaceWithMessage(durationsContainer, 'Choose a start time first.');
+    };
+
+    const resetSelection = () => {
+        selectedSlot = null;
+
+        if (startInput instanceof HTMLInputElement) {
+            startInput.value = '';
+        }
+
+        resetDuration();
+    };
+
+    const formatDate = (date) => {
+        const [year, month, day] = date.split('-');
+
+        return `${day}.${month}.${year}`;
+    };
+
+    const endTime = (start, duration) => {
+        const [hours, minutes] = start.split(':').map(Number);
+        const total = (hours * 60) + minutes + duration;
+
+        return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+    };
+
+    const renderSummary = () => {
+        if (
+            !(summary instanceof HTMLElement)
+            || !(dateInput instanceof HTMLInputElement)
+            || !(durationInput instanceof HTMLInputElement)
+            || !selectedSlot
+            || !durationInput.value
+        ) {
+            resetSummary();
+            return;
+        }
+
+        const duration = Number(durationInput.value);
+        summary.querySelector('[data-summary-date]').textContent = formatDate(dateInput.value);
+        summary.querySelector('[data-summary-start]').textContent = selectedSlot.time;
+        summary.querySelector('[data-summary-duration]').textContent = durationLabels[duration];
+        summary.querySelector('[data-summary-end]').textContent = endTime(selectedSlot.time, duration);
+        summary.hidden = false;
+    };
+
+    const renderDurations = (slot) => {
+        if (!(durationsContainer instanceof HTMLElement) || !(durationInput instanceof HTMLInputElement)) {
+            return;
+        }
+
+        durationInput.value = '';
+        resetSummary();
+        durationsContainer.replaceChildren();
+
+        slot.durations.forEach((duration) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'appointment-slot is-available';
+            button.textContent = durationLabels[duration] ?? `${duration} minutes`;
+            button.addEventListener('click', () => {
+                durationsContainer.querySelectorAll('.appointment-slot.is-selected').forEach((selected) => {
+                    selected.classList.remove('is-selected');
+                    selected.removeAttribute('aria-pressed');
+                });
+                button.classList.add('is-selected');
+                button.setAttribute('aria-pressed', 'true');
+                durationInput.value = String(duration);
+                durationInput.removeAttribute('aria-invalid');
+
+                const error = appointmentForm.querySelector('[data-field-error="duration_minutes"]');
+                if (error instanceof HTMLElement) {
+                    error.textContent = '';
+                }
+
+                renderSummary();
+            });
+            durationsContainer.append(button);
+        });
+    };
+
+    const renderSlots = (slots, isClosed) => {
         if (!(slotsContainer instanceof HTMLElement) || !(startInput instanceof HTMLInputElement)) {
             return;
         }
 
         slotsContainer.replaceChildren();
 
+        if (isClosed) {
+            if (dateInput instanceof HTMLInputElement) {
+                dateInput.setCustomValidity('This date is closed for bookings.');
+            }
+            replaceWithMessage(slotsContainer, 'This date is closed for bookings.');
+            return;
+        }
+
         if (!slots.length) {
-            setSlotsMessage('There are no appointment times for this date.');
+            if (dateInput instanceof HTMLInputElement) {
+                dateInput.setCustomValidity('Choose a weekday.');
+            }
+            replaceWithMessage(slotsContainer, 'Appointments are available Monday through Friday.');
             return;
         }
 
         slots.forEach((slot) => {
             const button = document.createElement('button');
-            const isUnavailable = slot.is_booked || slot.is_past;
-
             button.type = 'button';
             button.className = 'appointment-slot';
             button.textContent = slot.time;
-            button.disabled = isUnavailable;
             button.dataset.startAt = slot.start_at;
+            button.disabled = !slot.is_available;
 
-            if (slot.is_booked) {
-                button.classList.add('is-booked');
-                button.setAttribute('aria-label', `${slot.time}, booked`);
-            } else if (slot.is_past) {
+            if (!slot.is_available) {
                 button.classList.add('is-unavailable');
-                button.setAttribute('aria-label', `${slot.time}, no longer available`);
-            } else {
-                button.classList.add('is-available');
-                button.setAttribute('aria-label', `${slot.time}, available`);
-                button.addEventListener('click', () => {
-                    slotsContainer.querySelectorAll('.appointment-slot.is-selected').forEach((selected) => {
-                        selected.classList.remove('is-selected');
-                        selected.removeAttribute('aria-pressed');
-                    });
-                    button.classList.add('is-selected');
-                    button.setAttribute('aria-pressed', 'true');
-                    startInput.value = slot.start_at;
-                    startInput.removeAttribute('aria-invalid');
-
-                    const error = appointmentForm.querySelector('[data-field-error="start_at"]');
-                    if (error instanceof HTMLElement) {
-                        error.textContent = '';
-                    }
-                });
+                button.setAttribute('aria-label', `${slot.time}, unavailable`);
+                button.title = slot.is_past ? 'This time has passed' : 'No duration is available';
+                slotsContainer.append(button);
+                return;
             }
+
+            button.classList.add('is-available');
+            button.setAttribute('aria-label', `${slot.time}, available`);
+            button.addEventListener('click', () => {
+                slotsContainer.querySelectorAll('.appointment-slot.is-selected').forEach((selected) => {
+                    selected.classList.remove('is-selected');
+                    selected.removeAttribute('aria-pressed');
+                });
+                button.classList.add('is-selected');
+                button.setAttribute('aria-pressed', 'true');
+                selectedSlot = slot;
+                startInput.value = slot.start_at;
+                startInput.removeAttribute('aria-invalid');
+
+                const error = appointmentForm.querySelector('[data-field-error="start_at"]');
+                if (error instanceof HTMLElement) {
+                    error.textContent = '';
+                }
+
+                renderDurations(slot);
+            });
 
             slotsContainer.append(button);
         });
     };
 
     const loadSlots = async () => {
-        if (!(dateInput instanceof HTMLInputElement) || !(startInput instanceof HTMLInputElement)) {
+        if (!(dateInput instanceof HTMLInputElement)) {
             return;
         }
 
-        startInput.value = '';
+        resetSelection();
+        dateInput.setCustomValidity('');
 
         if (!dateInput.value) {
-            setSlotsMessage('Choose a date to see available times.');
+            replaceWithMessage(slotsContainer, 'Choose a date to see available times.');
             return;
         }
 
-        setSlotsMessage('Loading available times…');
+        replaceWithMessage(slotsContainer, 'Loading available times…');
 
         try {
             const url = new URL(appointmentForm.dataset.slotsUrl, window.location.origin);
@@ -109,15 +227,15 @@ if (appointmentForm instanceof HTMLFormElement) {
                 throw new Error('Could not load appointment slots.');
             }
 
-            renderSlots(result.data.slots);
+            renderSlots(result.data.slots, result.data.is_closed === true);
         } catch {
-            setSlotsMessage('We could not load times for this date. Please try again.');
+            replaceWithMessage(slotsContainer, 'We could not load times for this date. Please try again.');
         }
     };
 
     if (dateInput instanceof HTMLInputElement) {
-        dateInput.min = utcToday();
-        dateInput.value = utcToday();
+        dateInput.min = appointmentForm.dataset.today;
+        dateInput.value = appointmentForm.dataset.today;
         dateInput.addEventListener('change', loadSlots);
         loadSlots();
     }
@@ -180,7 +298,12 @@ if (appointmentForm instanceof HTMLFormElement) {
         }
 
         if (!(startInput instanceof HTMLInputElement) || !startInput.value) {
-            showStartError('Choose one available time.');
+            showFieldError('start_at', 'Choose one available start time.');
+            return;
+        }
+
+        if (!(durationInput instanceof HTMLInputElement) || !durationInput.value) {
+            showFieldError('duration_minutes', 'Choose an available duration.');
             return;
         }
 
@@ -216,10 +339,12 @@ if (appointmentForm instanceof HTMLFormElement) {
 
             if (response.status === 422 && result.errors) {
                 showValidationErrors(result.errors);
-                formMessage.textContent = 'Please check the highlighted fields.';
 
-                if (result.errors.start_at) {
+                if (result.errors.start_at || result.errors.duration_minutes) {
+                    formMessage.textContent = 'Availability changed. Please choose a start time and duration again.';
                     loadSlots();
+                } else {
+                    formMessage.textContent = 'Please check the highlighted fields.';
                 }
             } else {
                 formMessage.textContent = 'We could not complete your booking. Please try again.';

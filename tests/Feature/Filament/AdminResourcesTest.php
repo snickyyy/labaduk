@@ -23,6 +23,7 @@ class AdminResourcesTest extends TestCase
         $this->get('/admin')->assertForbidden();
         $this->get('/admin/appointments')->assertForbidden();
         $this->get('/admin/availabilities')->assertForbidden();
+        $this->get('/admin/closed-dates')->assertForbidden();
     }
 
     public function test_ordinary_user_cannot_grant_themselves_admin_privileges_by_mass_assignment(): void
@@ -49,8 +50,9 @@ class AdminResourcesTest extends TestCase
         $this->get('/admin/availabilities')
             ->assertOk()
             ->assertSee('Понедельник')
-            ->assertSee('Воскресенье');
-        $this->get('/admin/availabilities/create')->assertOk();
+            ->assertSee('Пятница')
+            ->assertDontSee('Воскресенье');
+        $this->get('/admin/availabilities/create')->assertNotFound();
     }
 
     public function test_appointments_resource_pages_render(): void
@@ -59,5 +61,13 @@ class AdminResourcesTest extends TestCase
 
         $this->get('/admin/appointments')->assertOk();
         $this->get('/admin/appointments/create')->assertOk();
+    }
+
+    public function test_closed_dates_resource_pages_render(): void
+    {
+        $this->actingAs(User::factory()->admin()->create());
+
+        $this->get('/admin/closed-dates')->assertOk();
+        $this->get('/admin/closed-dates/create')->assertOk();
     }
 }

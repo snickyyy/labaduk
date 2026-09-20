@@ -18,16 +18,19 @@ class AppointmentController extends Controller
         $validated = $request->validate([
             'date' => ['required', 'date_format:Y-m-d'],
         ]);
-        $date = CarbonImmutable::createFromFormat('!Y-m-d', $validated['date'], 'UTC');
+        $date = CarbonImmutable::createFromFormat('!Y-m-d', $validated['date'], AppointmentService::TIMEZONE);
 
         return response()->json([
             'data' => [
                 'date' => $date->toDateString(),
+                'timezone' => AppointmentService::TIMEZONE,
+                'is_closed' => $service->isClosedDate($date),
                 'slots' => $service->slotsForDate($date)
                     ->map(fn (array $slot): array => [
                         'start_at' => $slot['start_at']->toIso8601String(),
-                        'time' => $slot['start_at']->format('H:i'),
-                        'is_booked' => $slot['is_booked'],
+                        'time' => $slot['time'],
+                        'durations' => $slot['durations'],
+                        'is_available' => $slot['is_available'],
                         'is_past' => $slot['is_past'],
                     ]),
             ],

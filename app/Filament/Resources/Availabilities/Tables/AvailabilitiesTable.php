@@ -3,9 +3,6 @@
 namespace App\Filament\Resources\Availabilities\Tables;
 
 use App\Enums\DayOfWeek;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -39,15 +36,17 @@ class AvailabilitiesTable
             ->filters([
                 SelectFilter::make('day_of_week')
                     ->label('День недели')
-                    ->options(DayOfWeek::class),
+                    ->options(collect([
+                        DayOfWeek::MONDAY,
+                        DayOfWeek::TUESDAY,
+                        DayOfWeek::WEDNESDAY,
+                        DayOfWeek::THURSDAY,
+                        DayOfWeek::FRIDAY,
+                    ])->mapWithKeys(fn (DayOfWeek $day): array => [
+                        $day->value => $day->getLabel(),
+                    ])->all()),
             ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions([])
+            ->toolbarActions([]);
     }
 }

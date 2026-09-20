@@ -25,6 +25,9 @@ class AppointmentPageTest extends TestCase
             ->assertSee('data-appointment-date', false)
             ->assertSee('data-appointment-slots', false)
             ->assertSee('name="start_at"', false)
+            ->assertSee('data-appointment-durations', false)
+            ->assertSee('name="duration_minutes"', false)
+            ->assertSee('data-appointment-summary', false)
             ->assertDontSee('name="end_at"', false);
     }
 

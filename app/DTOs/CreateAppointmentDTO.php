@@ -16,6 +16,7 @@ final readonly class CreateAppointmentDTO
         public string $email,
         public string $phoneNumber,
         public CarbonImmutable $startAt,
+        public int $durationMinutes,
     ) {}
 
     public static function fromRequest(StoreAppointmentRequest $request): self
@@ -25,7 +26,11 @@ final readonly class CreateAppointmentDTO
             lastName: (string) $request->validated('last_name'),
             email: (string) $request->validated('email'),
             phoneNumber: (string) $request->validated('phone_number'),
-            startAt: CarbonImmutable::parse((string) $request->validated('start_at'))->utc(),
+            startAt: CarbonImmutable::parse(
+                (string) $request->validated('start_at'),
+                config('appointments.timezone'),
+            )->utc(),
+            durationMinutes: (int) $request->validated('duration_minutes'),
         );
     }
 

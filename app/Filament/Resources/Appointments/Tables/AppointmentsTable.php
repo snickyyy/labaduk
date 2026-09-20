@@ -3,6 +3,9 @@
 namespace App\Filament\Resources\Appointments\Tables;
 
 use App\Enums\AppointmentStatus;
+use App\Models\Appointment;
+use App\Services\AppointmentService;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -34,6 +37,12 @@ class AppointmentsTable
                 TextColumn::make('start_at')
                     ->label('Начало')
                     ->dateTime('d.m.Y H:i')
+                    ->timezone(AppointmentService::TIMEZONE)
+                    ->sortable(),
+                TextColumn::make('end_at')
+                    ->label('Окончание')
+                    ->dateTime('d.m.Y H:i')
+                    ->timezone(AppointmentService::TIMEZONE)
                     ->sortable(),
                 TextColumn::make('status')
                     ->label('Статус')
@@ -55,6 +64,12 @@ class AppointmentsTable
                     ->options(AppointmentStatus::class),
             ])
             ->recordActions([
+                Action::make('cancel')
+                    ->label('Отменить')
+                    ->color('gray')
+                    ->requiresConfirmation()
+                    ->visible(fn (Appointment $record): bool => $record->status !== AppointmentStatus::CANCELED)
+                    ->action(fn (Appointment $record): Appointment => app(AppointmentService::class)->cancel($record)),
                 EditAction::make(),
             ])
             ->toolbarActions([

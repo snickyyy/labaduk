@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreAppointmentRequest extends FormRequest
 {
@@ -25,6 +26,7 @@ class StoreAppointmentRequest extends FormRequest
             'email' => ['required', 'email', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
             'start_at' => ['required', 'date'],
+            'duration_minutes' => ['required', 'integer', Rule::in(config('appointments.durations'))],
         ];
     }
 }

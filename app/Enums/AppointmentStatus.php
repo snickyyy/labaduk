@@ -13,6 +13,27 @@ enum AppointmentStatus: string implements HasColor, HasLabel
     case RESCHEDULED = 'RESCHEDULED';
     case CANCELED = 'CANCELED';
 
+    /**
+     * @return array<int, self>
+     */
+    public static function blocking(): array
+    {
+        return [self::CREATED, self::SUCCESSFUL, self::PIDOR];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function blockingValues(): array
+    {
+        return array_column(self::blocking(), 'value');
+    }
+
+    public function blocksTime(): bool
+    {
+        return in_array($this, self::blocking(), true);
+    }
+
     public function getLabel(): string
     {
         return match ($this) {

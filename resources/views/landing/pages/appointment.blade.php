@@ -12,7 +12,7 @@
 
             <div class="appointment-intro__note">
                 <span aria-hidden="true">01</span>
-                <p>Choose a date, then select one available one-hour slot. All times are shown in UTC.</p>
+                <p>Choose a weekday, a start time and a duration. Visits are available from 14:00 to 18:00 Berlin time.</p>
             </div>
         </header>
 
@@ -24,6 +24,7 @@
                 data-appointment-form
                 data-success-url="{{ route('landing.appointments.confirmation', ['locale' => app()->getLocale()]) }}"
                 data-slots-url="{{ route('appointments.slots') }}"
+                data-today="{{ now('Europe/Berlin')->toDateString() }}"
             >
                 <div class="appointment-form__heading">
                     <span>Your details</span>
@@ -56,17 +57,36 @@
                     </div>
 
                     <div class="appointment-field appointment-field--full">
-                        <label for="appointment_date">Date <span>UTC</span></label>
+                        <label for="appointment_date">Date <span>Europe/Berlin</span></label>
                         <input id="appointment_date" type="date" required data-appointment-date aria-describedby="start_at_error">
                     </div>
 
                     <div class="appointment-field appointment-field--full">
-                        <label id="appointment-slots-label">Available times <span>one hour · UTC</span></label>
+                        <label id="appointment-slots-label">Start time <span>30-minute steps</span></label>
                         <div class="appointment-slots" data-appointment-slots aria-labelledby="appointment-slots-label" aria-live="polite">
                             <p class="appointment-slots__message">Choose a date to see available times.</p>
                         </div>
                         <input id="start_at" name="start_at" type="hidden" aria-describedby="start_at_error">
                         <p id="start_at_error" class="appointment-field__error" data-field-error="start_at"></p>
+                    </div>
+
+                    <div class="appointment-field appointment-field--full">
+                        <label id="appointment-durations-label">Duration <span>30–120 minutes</span></label>
+                        <div class="appointment-slots appointment-durations" data-appointment-durations aria-labelledby="appointment-durations-label" aria-live="polite">
+                            <p class="appointment-slots__message">Choose a start time first.</p>
+                        </div>
+                        <input id="duration_minutes" name="duration_minutes" type="hidden" aria-describedby="duration_minutes_error">
+                        <p id="duration_minutes_error" class="appointment-field__error" data-field-error="duration_minutes"></p>
+                    </div>
+
+                    <div class="appointment-field appointment-field--full appointment-summary" data-appointment-summary hidden>
+                        <p class="appointment-summary__title">Your visit</p>
+                        <dl>
+                            <div><dt>Date</dt><dd data-summary-date></dd></div>
+                            <div><dt>Start</dt><dd data-summary-start></dd></div>
+                            <div><dt>Duration</dt><dd data-summary-duration></dd></div>
+                            <div><dt>End</dt><dd data-summary-end></dd></div>
+                        </dl>
                     </div>
                 </div>
 

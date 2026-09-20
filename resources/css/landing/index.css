@@ -1445,6 +1445,10 @@ main {
     min-height: 54px;
 }
 
+.appointment-durations {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
 .appointment-slots__message {
     grid-column: 1 / -1;
     margin: 0;
@@ -1502,6 +1506,45 @@ main {
     font-size: 0.75rem;
     font-weight: 700;
     line-height: 1.35;
+}
+
+.appointment-summary {
+    padding: 18px;
+    border: 1px solid var(--landing-black);
+    background: var(--landing-white);
+}
+
+.appointment-summary__title {
+    margin: 0 0 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.appointment-summary dl {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0;
+}
+
+.appointment-summary dl div {
+    min-width: 0;
+}
+
+.appointment-summary dt {
+    color: var(--landing-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.appointment-summary dd {
+    margin: 4px 0 0;
+    font-family: var(--landing-serif);
+    font-size: 1.1rem;
 }
 
 .appointment-form__submit {
@@ -1760,6 +1803,10 @@ main {
 
     .appointment-form__submit button {
         width: 100%;
+    }
+
+    .appointment-summary dl {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .appointment-confirmation {

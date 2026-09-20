@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Availabilities;
 
-use App\Filament\Resources\Availabilities\Pages\CreateAvailability;
-use App\Filament\Resources\Availabilities\Pages\EditAvailability;
 use App\Filament\Resources\Availabilities\Pages\ListAvailabilities;
 use App\Filament\Resources\Availabilities\Schemas\AvailabilityForm;
 use App\Filament\Resources\Availabilities\Tables\AvailabilitiesTable;
@@ -52,8 +50,6 @@ class AvailabilityResource extends Resource
     {
         return [
             'index' => ListAvailabilities::route('/'),
-            'create' => CreateAvailability::route('/create'),
-            'edit' => EditAvailability::route('/{record}/edit'),
         ];
     }
 }

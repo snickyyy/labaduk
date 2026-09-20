@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['first_name', 'last_name', 'email', 'phone_number', 'start_at', 'status'])]
+#[Fillable(['first_name', 'last_name', 'email', 'phone_number', 'start_at', 'end_at', 'status'])]
 class Appointment extends Model
 {
     use HasUuids;
