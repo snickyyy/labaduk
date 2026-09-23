@@ -1,7 +1,7 @@
 @extends('landing.layouts.app')
 
-@section('title', 'Visit Confirmed — Slash Editorial')
-@section('description', 'Your visit to the Slash Editorial rehearsal room has been booked.')
+@section('title', __('confirmationPage.meta.title'))
+@section('description', __('confirmationPage.meta.description'))
 
 @section('content')
     <section class="appointment-confirmation" aria-labelledby="confirmation-title">
@@ -12,9 +12,9 @@
             </svg>
         </div>
 
-        <span class="appointment-eyebrow">Booking received</span>
-        <h1 id="confirmation-title">Thank you.<br><em>We’ll see you soon.</em></h1>
-        <p>Your visit is booked. Keep an eye on your inbox in case we need to contact you before your appointment.</p>
-        <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}">Back to home <span aria-hidden="true">↗</span></a>
+        <span class="appointment-eyebrow">{{ __('confirmationPage.eyebrow') }}</span>
+        <h1 id="confirmation-title">{{ __('confirmationPage.heading') }}<br><em>{{ __('confirmationPage.heading_emphasis') }}</em></h1>
+        <p>{{ __('confirmationPage.description') }}</p>
+        <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}">{{ __('confirmationPage.back_home') }} <span aria-hidden="true">↗</span></a>
     </section>
 @endsection

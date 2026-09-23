@@ -1,19 +1,19 @@
 @extends('landing.layouts.app')
 
-@section('title', 'About Us — Slash Editorial')
-@section('description', 'Meet the people behind Slash Editorial: an independent rock group built on loud rooms, honest songs and the work of playing together.')
+@section('title', __('aboutPage.meta.title'))
+@section('description', __('aboutPage.meta.description'))
 
 @section('content')
     <section class="about-intro" aria-labelledby="about-title">
         <div class="about-intro__copy">
-            <span class="about-eyebrow">Independent since 2021</span>
-            <h1 id="about-title">About<br><em>us</em></h1>
-            <p class="about-intro__lead">We are six people building loud, direct music from the ground up.</p>
-            <p>Slash Editorial began in a borrowed rehearsal room in Berlin: two unfinished songs, one unreliable amplifier and a shared refusal to make anything that felt disposable. Since then, the group has grown into a collective shaped equally by rehearsals, stage work and the conversations that happen after the noise stops.</p>
-            <p>Our sound lives between hard rock, alternative metal and the rough edges we choose not to edit out. Every member brings a different discipline, but the aim stays the same — make songs with enough weight to be felt and enough detail to be remembered.</p>
+            <span class="about-eyebrow">{{ __('aboutPage.hero.eyebrow') }}</span>
+            <h1 id="about-title">{{ __('landing.nav.about') }}<br><em>{{ __('aboutPage.hero.title_line_two') }}</em></h1>
+            <p class="about-intro__lead">{{ __('aboutPage.hero.lead') }}</p>
+            <p>{{ __('aboutPage.hero.paragraph_one') }}</p>
+            <p>{{ __('aboutPage.hero.paragraph_two') }}</p>
         </div>
 
-        <div class="about-intro__gallery" aria-label="Members of the group">
+        <div class="about-intro__gallery" aria-label="{{ __('aboutPage.gallery.aria_label') }}">
             @foreach ($members->take(3) as $member)
                 <figure>
                     <img src="{{ $member['image'] }}" alt="{{ $member['name'] }}, {{ strtolower($member['role']) }}" @if (!$loop->first) loading="lazy" @endif>
@@ -25,15 +25,15 @@
 
     <div class="about-members-divider" id="members" aria-labelledby="members-title">
         <span aria-hidden="true"></span>
-        <h2 id="members-title">Members</h2>
+        <h2 id="members-title">{{ __('aboutPage.members.heading') }}</h2>
         <span aria-hidden="true"></span>
     </div>
 
-    <section class="about-members" aria-label="Band member profiles">
+    <section class="about-members" aria-label="{{ __('aboutPage.members.aria_label') }}">
         @forelse ($members as $member)
             <article class="member-profile" id="{{ $member['slug'] }}">
                 <div class="member-profile__image">
-                    <img src="{{ $member['image'] }}" alt="Portrait of {{ $member['name'] }}" loading="lazy">
+                    <img src="{{ $member['image'] }}" alt="{{ __('aboutPage.member.portrait_alt', ['name' => $member['name']]) }}" loading="lazy">
                     <span class="member-profile__index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                 </div>
 
@@ -48,34 +48,34 @@
 
                     <dl class="member-profile__facts">
                         <div>
-                            <dt>Age</dt>
+                            <dt>{{ __('aboutPage.member.age') }}</dt>
                             <dd>{{ $member['age'] }}</dd>
                         </div>
                         <div>
-                            <dt>From</dt>
+                            <dt>{{ __('aboutPage.member.from') }}</dt>
                             <dd>{{ $member['from'] }}</dd>
                         </div>
                         <div>
-                            <dt>Experience</dt>
+                            <dt>{{ __('aboutPage.member.experience') }}</dt>
                             <dd>{{ $member['experience'] }}</dd>
                         </div>
                     </dl>
 
                     <div class="member-profile__motive">
-                        <span>Why they play</span>
+                        <span>{{ __('aboutPage.member.motive_label') }}</span>
                         <p>{{ $member['motive'] }}</p>
                     </div>
                 </div>
             </article>
         @empty
-            <p class="about-members__empty">Member profiles are being prepared.</p>
+            <p class="about-members__empty">{{ __('aboutPage.members.empty') }}</p>
         @endforelse
     </section>
 
     <section class="about-cta" aria-labelledby="about-cta-title">
-        <span class="about-cta__label">Come as you are</span>
-        <h2 id="about-cta-title">Want to get to know us <em>up close?</em></h2>
-        <p>Book a visit, step into the rehearsal room and see how the noise comes together.</p>
-        <a href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}">Book a visit <span aria-hidden="true">↗</span></a>
+        <span class="about-cta__label">{{ __('aboutPage.cta.label') }}</span>
+        <h2 id="about-cta-title">{{ __('aboutPage.cta.heading') }} <em>{{ __('aboutPage.cta.heading_emphasis') }}</em></h2>
+        <p>{{ __('aboutPage.cta.description') }}</p>
+        <a href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}">{{ __('landing.nav.book_visit') }} <span aria-hidden="true">↗</span></a>
     </section>
 @endsection
