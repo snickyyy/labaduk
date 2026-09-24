@@ -7,7 +7,10 @@
     <section class="appointment-page" aria-labelledby="appointment-title">
         <header class="appointment-intro">
             <span class="appointment-eyebrow">{{ __('appointmentPage.hero.eyebrow') }}</span>
-            <h1 id="appointment-title">{{ __('appointmentPage.hero.title_line_one') }}<br><em>{{ __('appointmentPage.hero.title_line_two') }}</em></h1>
+            <h1 id="appointment-title" data-fit-text>
+                <span>{{ __('appointmentPage.hero.title_line_one') }}</span>
+                <em>{{ __('appointmentPage.hero.title_line_two') }}</em>
+            </h1>
             <p>{{ __('appointmentPage.hero.description') }}</p>
 
             <div class="appointment-intro__note">

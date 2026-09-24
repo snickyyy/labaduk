@@ -22,4 +22,27 @@ class HomePageTest extends TestCase
     {
         $this->get('/fr')->assertNotFound();
     }
+
+    public function test_new_landing_locales_are_available(): void
+    {
+        $this->get('/de')
+            ->assertOk()
+            ->assertSee('<html lang="de">', false)
+            ->assertSee('Das Riff, das');
+
+        $this->get('/ua')
+            ->assertOk()
+            ->assertSee('<html lang="ua">', false)
+            ->assertSee('Риф, який');
+    }
+
+    public function test_language_selector_links_to_each_supported_locale(): void
+    {
+        $this->get('/en')
+            ->assertOk()
+            ->assertSee('data-language-select', false)
+            ->assertSee('value="'.route('landing.home', ['locale' => 'de']).'"', false)
+            ->assertSee('value="'.route('landing.home', ['locale' => 'ua']).'"', false)
+            ->assertSee('>English</option>', false);
+    }
 }

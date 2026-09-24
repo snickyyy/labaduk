@@ -5,5 +5,13 @@ return [
 
     'supported_locales' => [
         'en',
+        'de',
+        'ua',
+    ],
+
+    'locale_names' => [
+        'en' => 'English',
+        'de' => 'Deutsch',
+        'ua' => 'Українська',
     ],
 ];

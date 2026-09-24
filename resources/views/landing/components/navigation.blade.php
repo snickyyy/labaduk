@@ -21,17 +21,18 @@
                     <path d="m16 16 4 4"></path>
                 </svg>
             </span>
-            <div class="landing-languages" aria-label="{{ __('landing.locale.label') }}">
+            <label class="landing-language-select">
+                <span class="sr-only">{{ __('landing.locale.label') }}</span>
+                <select data-language-select aria-label="{{ __('landing.locale.label') }}">
                 @foreach (config('landing.supported_locales') as $locale)
-                    <a
-                        href="{{ route(request()->route()->getName(), ['locale' => $locale]) }}"
-                        hreflang="{{ $locale }}"
-                        @if ($locale === app()->getLocale()) aria-current="true" @endif
-                    >
-                        {{ strtoupper($locale) }}
-                    </a>
+                    <option
+                        value="{{ route(request()->route()->getName(), ['locale' => $locale]) }}"
+                        lang="{{ $locale }}"
+                        @selected($locale === app()->getLocale())
+                    >{{ config("landing.locale_names.{$locale}", strtoupper($locale)) }}</option>
                 @endforeach
-            </div>
+                </select>
+            </label>
             <a class="landing-button" href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}">
                 {{ __('landing.nav.book_visit') }}
             </a>
@@ -49,15 +50,18 @@
                     <a href="{{ route('landing.about', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.about')) aria-current="page" @endif>{{ __('landing.nav.about') }}</a>
                     <a href="{{ route('landing.visit-rules', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.visit-rules')) aria-current="page" @endif>{{ __('landing.nav.visit_rules') }}</a>
                     <a href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.appointments.*')) aria-current="page" @endif>{{ __('landing.nav.book_visit') }}</a>
-                    @foreach (config('landing.supported_locales') as $locale)
-                        <a
-                            href="{{ route(request()->route()->getName(), ['locale' => $locale]) }}"
-                            hreflang="{{ $locale }}"
-                            @if ($locale === app()->getLocale()) aria-current="true" @endif
-                        >
-                            {{ strtoupper($locale) }}
-                        </a>
-                    @endforeach
+                    <label class="landing-menu__language landing-language-select">
+                        <span>{{ __('landing.locale.label') }}</span>
+                        <select data-language-select aria-label="{{ __('landing.locale.label') }}">
+                            @foreach (config('landing.supported_locales') as $locale)
+                                <option
+                                    value="{{ route(request()->route()->getName(), ['locale' => $locale]) }}"
+                                    lang="{{ $locale }}"
+                                    @selected($locale === app()->getLocale())
+                                >{{ config("landing.locale_names.{$locale}", strtoupper($locale)) }}</option>
+                            @endforeach
+                        </select>
+                    </label>
                 </div>
             </details>
         </div>

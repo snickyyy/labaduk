@@ -162,21 +162,98 @@ main {
     gap: 16px;
 }
 
-.landing-languages {
+.landing-language-select {
+    position: relative;
     display: flex;
     align-items: center;
     padding-left: 14px;
     border-left: 1px solid rgba(255, 255, 255, 0.38);
 }
 
-.landing-languages a {
+.landing-language-select .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.landing-language-select select {
+    min-width: 108px;
+    height: 36px;
+    padding: 0 28px 0 10px;
+    border: 1px solid rgba(255, 255, 255, 0.48);
+    border-radius: 0;
+    outline: 0;
+    appearance: none;
+    background: transparent;
+    color: var(--landing-white);
+    cursor: pointer;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
-    text-decoration: none;
+    line-height: 1;
+    text-transform: uppercase;
 }
 
-.landing-languages a[aria-current="true"] {
+.landing-language-select::after {
+    position: absolute;
+    right: 11px;
+    width: 7px;
+    height: 7px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    color: var(--landing-white);
+    content: "";
+    pointer-events: none;
+    transform: translateY(-2px) rotate(45deg);
+}
+
+.landing-language-select select:hover,
+.landing-language-select select:focus-visible {
+    border-color: var(--landing-white);
+}
+
+.landing-language-select option {
+    background: var(--landing-black);
+    color: var(--landing-white);
+}
+
+.landing-menu__language {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.landing-menu__language span {
+    padding: 0;
+    border-bottom: 0;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.landing-menu__language select {
+    min-width: 112px;
+    height: 34px;
+    padding-left: 8px;
+    font-size: 0.68rem;
+}
+
+.landing-menu__language::after {
+    right: 28px;
+}
+
+.landing-menu__language select:focus-visible {
+    outline: 2px solid var(--landing-white);
+    outline-offset: 2px;
+}
+
+.landing-language-select select option:checked {
     color: #f05257;
 }
 
@@ -1318,6 +1395,20 @@ main {
     text-transform: uppercase;
 }
 
+.appointment-intro h1 {
+    width: 100%;
+    text-align: center;
+}
+
+.appointment-intro h1 > span,
+.appointment-intro h1 > em {
+    display: block;
+    width: max-content;
+    max-width: none;
+    margin-inline: auto;
+    white-space: nowrap;
+}
+
 .appointment-intro h1 em,
 .appointment-confirmation h1 em {
     color: #f05257;
@@ -1761,7 +1852,7 @@ main {
 
     .landing-nav__links,
     .landing-nav__search,
-    .landing-languages {
+    .landing-nav__actions > .landing-language-select {
         display: none;
     }
 

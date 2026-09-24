@@ -1,3 +1,44 @@
+document.querySelectorAll('[data-language-select]').forEach((select) => {
+    select.addEventListener('change', (event) => {
+        const target = event.currentTarget;
+
+        if (target instanceof HTMLSelectElement && target.value) {
+            window.location.assign(target.value);
+        }
+    });
+});
+
+document.querySelectorAll('[data-fit-text]').forEach((element) => {
+    if (!(element instanceof HTMLElement)) {
+        return;
+    }
+
+    const fitText = () => {
+        element.style.removeProperty('font-size');
+
+        const availableWidth = element.clientWidth;
+        const contentWidth = element.scrollWidth;
+
+        if (!availableWidth || contentWidth <= availableWidth) {
+            return;
+        }
+
+        const baseFontSize = Number.parseFloat(window.getComputedStyle(element).fontSize);
+        const scale = (availableWidth / contentWidth) * 0.98;
+
+        element.style.fontSize = `${baseFontSize * scale}px`;
+    };
+
+    if (element.parentElement && 'ResizeObserver' in window) {
+        new ResizeObserver(fitText).observe(element.parentElement);
+    } else {
+        window.addEventListener('resize', fitText);
+    }
+
+    fitText();
+    document.fonts?.ready?.then(fitText);
+});
+
 const appointmentForm = document.querySelector('[data-appointment-form]');
 
 if (appointmentForm instanceof HTMLFormElement) {
