@@ -225,7 +225,7 @@ main {
 .landing-menu__language {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 14px;
     padding: 14px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.28);

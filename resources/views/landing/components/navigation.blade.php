@@ -51,7 +51,6 @@
                     <a href="{{ route('landing.visit-rules', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.visit-rules')) aria-current="page" @endif>{{ __('landing.nav.visit_rules') }}</a>
                     <a href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.appointments.*')) aria-current="page" @endif>{{ __('landing.nav.book_visit') }}</a>
                     <label class="landing-menu__language landing-language-select">
-                        <span>{{ __('landing.locale.label') }}</span>
                         <select data-language-select aria-label="{{ __('landing.locale.label') }}">
                             @foreach (config('landing.supported_locales') as $locale)
                                 <option
