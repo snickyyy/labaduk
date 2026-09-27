@@ -17,7 +17,7 @@
             @foreach ($members->take(3) as $member)
                 <figure>
                     <img src="{{ $member['image'] }}" alt="{{ $member['name'] }}, {{ strtolower($member['role']) }}" @if (!$loop->first) loading="lazy" @endif>
-                    <figcaption>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }} / {{ $member['name'] }}</figcaption>
+                    <figcaption>{{ $member['index'] }} / {{ $member['name'] }}</figcaption>
                 </figure>
             @endforeach
         </div>
@@ -34,7 +34,7 @@
             <article class="member-profile" id="{{ $member['slug'] }}">
                 <div class="member-profile__image">
                     <img src="{{ $member['image'] }}" alt="{{ __('aboutPage.member.portrait_alt', ['name' => $member['name']]) }}" loading="lazy">
-                    <span class="member-profile__index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                    <span class="member-profile__index">{{ $member['index'] }}</span>
                 </div>
 
                 <div class="member-profile__content">
@@ -43,28 +43,47 @@
                         <h3>{{ $member['name'] }}</h3>
                     </header>
 
-                    <blockquote>“{{ $member['quote'] }}”</blockquote>
-                    <p>{{ $member['bio'] }}</p>
+                    @if ($member['quote'])
+                        <blockquote>“{{ $member['quote'] }}”</blockquote>
+                    @endif
+
+                    @if ($member['bio'])
+                        <p>{{ $member['bio'] }}</p>
+                    @endif
 
                     <dl class="member-profile__facts">
-                        <div>
-                            <dt>{{ __('aboutPage.member.age') }}</dt>
-                            <dd>{{ $member['age'] }}</dd>
-                        </div>
-                        <div>
-                            <dt>{{ __('aboutPage.member.from') }}</dt>
-                            <dd>{{ $member['from'] }}</dd>
-                        </div>
-                        <div>
-                            <dt>{{ __('aboutPage.member.experience') }}</dt>
-                            <dd>{{ $member['experience'] }}</dd>
-                        </div>
+                        @if ($member['age'])
+                            <div>
+                                <dt>{{ __('aboutPage.member.age') }}</dt>
+                                <dd>{{ $member['age'] }}</dd>
+                            </div>
+                        @endif
+                        @if ($member['from'])
+                            <div>
+                                <dt>{{ __('aboutPage.member.from') }}</dt>
+                                <dd>{{ $member['from'] }}</dd>
+                            </div>
+                        @endif
+                        @if ($member['experience'])
+                            <div>
+                                <dt>{{ __('aboutPage.member.experience') }}</dt>
+                                <dd>{{ $member['experience'] }}</dd>
+                            </div>
+                        @endif
+                        @if ($member['inspired_by'])
+                            <div>
+                                <dt>{{ __('aboutPage.member.inspired_by') }}</dt>
+                                <dd>{{ $member['inspired_by'] }}</dd>
+                            </div>
+                        @endif
                     </dl>
 
-                    <div class="member-profile__motive">
-                        <span>{{ __('aboutPage.member.motive_label') }}</span>
-                        <p>{{ $member['motive'] }}</p>
-                    </div>
+                    @if ($member['motive'])
+                        <div class="member-profile__motive">
+                            <span>{{ __('aboutPage.member.motive_label') }}</span>
+                            <p>{{ $member['motive'] }}</p>
+                        </div>
+                    @endif
                 </div>
             </article>
         @empty

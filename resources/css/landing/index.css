@@ -1026,18 +1026,19 @@ main {
 .about-members-divider {
     display: grid;
     width: 100%;
-    max-width: var(--landing-page-width);
+    max-width: none;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 28px;
     margin-inline: auto;
     padding: 94px var(--landing-page-margin);
-    background: var(--landing-bone);
+    background: var(--landing-black);
+    color: var(--landing-white);
 }
 
 .about-members-divider span {
     height: 1px;
-    background: var(--landing-black);
+    background: rgba(255, 255, 255, 0.4);
 }
 
 .about-members-divider h2 {
@@ -1052,21 +1053,21 @@ main {
 }
 
 .about-members {
-    border-top: 1px solid var(--landing-black);
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    background: var(--landing-black);
 }
 
 .member-profile {
     display: grid;
     min-height: 720px;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    border-bottom: 1px solid var(--landing-black);
-    background: var(--landing-cream);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    background: var(--landing-black);
+    color: var(--landing-white);
 }
 
 .member-profile:nth-child(even) {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    background: var(--landing-black);
-    color: var(--landing-white);
 }
 
 .member-profile:nth-child(even) .member-profile__image {
@@ -1134,10 +1135,6 @@ main {
 .member-profile__role {
     display: block;
     margin-bottom: 10px;
-    color: var(--landing-red);
-}
-
-.member-profile:nth-child(even) .member-profile__role {
     color: #f05257;
 }
 
@@ -1162,18 +1159,14 @@ main {
 .member-profile__content > p {
     max-width: 610px;
     margin: 0 0 34px;
-    color: var(--landing-on-surface, #1b1b1b);
+    color: rgba(255, 255, 255, 0.72);
     font-size: 1rem;
     line-height: 1.58;
 }
 
-.member-profile:nth-child(even) .member-profile__content > p {
-    color: rgba(255, 255, 255, 0.72);
-}
-
 .member-profile__facts {
     display: grid;
-    grid-template-columns: 0.7fr 1.2fr 1.1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     margin: 0 0 34px;
     border-top: 1px solid currentColor;
     border-left: 1px solid currentColor;
@@ -1207,10 +1200,6 @@ main {
 }
 
 .member-profile__motive > span {
-    color: var(--landing-red);
-}
-
-.member-profile:nth-child(even) .member-profile__motive > span {
     color: #f05257;
 }
 
@@ -1236,7 +1225,7 @@ main {
     justify-content: center;
     overflow: hidden;
     padding: 94px var(--landing-page-margin);
-    background: var(--landing-red-deep);
+    background: var(--landing-black);
     color: var(--landing-white);
     text-align: center;
 }
