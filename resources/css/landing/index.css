@@ -335,7 +335,7 @@ main {
 .landing-hero::after {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 38%, rgba(0, 0, 0, 0.08) 56%, rgba(0, 0, 0, 0.58) 100%);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.46), transparent 68%), linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.12) 52%, rgba(0, 0, 0, 0.78) 100%);
     content: "";
 }
 
@@ -347,10 +347,10 @@ main {
 .landing-hero__media img {
     width: 100%;
     height: 100%;
-    opacity: 0.8;
-    filter: grayscale(1) contrast(1.12);
+    opacity: 0.92;
+    filter: contrast(1.06) saturate(0.82);
     object-fit: cover;
-    object-position: center 52%;
+    object-position: center 28%;
 }
 
 .landing-hero__content {
@@ -390,6 +390,192 @@ main {
 
 .landing-hero h1 span {
     display: block;
+}
+
+.landing-hero__lead {
+    max-width: 510px;
+    margin: 24px 0 0;
+    color: var(--landing-white);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.45;
+    text-wrap: balance;
+}
+
+.landing-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.landing-button--outline {
+    border-color: rgba(255, 255, 255, 0.78);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.landing-button--outline:hover,
+.landing-button--outline:focus-visible {
+    background: var(--landing-white);
+    color: var(--landing-black);
+}
+
+.landing-open-room {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(320px, 5fr);
+    width: 100%;
+    max-width: var(--landing-page-width);
+    margin-inline: auto;
+    border-bottom: 1px solid var(--landing-black);
+}
+
+.landing-open-room__introduction {
+    padding: 110px var(--landing-page-margin) 100px;
+}
+
+.landing-open-room__eyebrow,
+.landing-open-room__visit-copy > span {
+    display: block;
+    margin-bottom: 18px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.landing-open-room h2 {
+    margin: 0;
+    font-size: clamp(3rem, 5.5vw, 5.6rem);
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    line-height: 0.86;
+    text-transform: uppercase;
+}
+
+.landing-open-room__introduction h2 em {
+    font-family: var(--landing-serif);
+    font-weight: 700;
+}
+
+.landing-open-room__lead {
+    max-width: 600px;
+    margin: 36px 0 54px;
+    font-family: var(--landing-serif);
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    line-height: 1.35;
+}
+
+.landing-open-room__steps {
+    display: grid;
+    gap: 0;
+    max-width: 620px;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--landing-black);
+    list-style: none;
+}
+
+.landing-open-room__steps li {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 16px;
+    padding: 18px 0 20px;
+    border-bottom: 1px solid var(--landing-black);
+}
+
+.landing-open-room__steps > li > span {
+    padding-top: 2px;
+    color: var(--landing-red);
+    font-family: var(--landing-serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.landing-open-room__steps h3 {
+    margin: 0 0 5px;
+    font-size: 0.78rem;
+    letter-spacing: 0.09em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.landing-open-room__steps p {
+    max-width: 440px;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+.landing-open-room__visit {
+    display: grid;
+    grid-template-rows: minmax(360px, 1.05fr) minmax(0, 0.95fr);
+    min-width: 0;
+}
+
+.landing-open-room__photo {
+    display: block;
+    min-height: 0;
+    overflow: hidden;
+    background: var(--landing-black);
+}
+
+.landing-open-room__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: contrast(1.05) saturate(0.8);
+    object-fit: cover;
+    object-position: center 58%;
+}
+
+.landing-open-room__visit-copy {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 52px var(--landing-page-margin) 58px;
+    background: var(--landing-red);
+    color: var(--landing-white);
+}
+
+.landing-open-room__visit-copy > span {
+    margin-bottom: auto;
+}
+
+.landing-open-room__visit-copy h2 {
+    max-width: 420px;
+    margin-bottom: 24px;
+    font-family: var(--landing-serif);
+    font-size: clamp(3rem, 5vw, 5.2rem);
+    line-height: 0.82;
+}
+
+.landing-open-room__visit-copy p {
+    max-width: 380px;
+    margin: 0 0 36px;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+.landing-open-room__visit-copy a {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 32px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--landing-white);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.landing-open-room__visit-copy a span {
+    font-size: 1.25rem;
+    line-height: 1;
 }
 
 .landing-lesson {
@@ -2053,6 +2239,37 @@ main {
     .landing-hero h1 {
         font-size: clamp(2.65rem, 12vw, 4rem);
         line-height: 0.88;
+    }
+
+    .landing-hero__lead {
+        max-width: 400px;
+        margin-top: 18px;
+        font-size: 0.95rem;
+    }
+
+    .landing-hero__actions {
+        margin-top: 22px;
+    }
+
+    .landing-open-room {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-open-room__introduction {
+        padding-block: 64px;
+    }
+
+    .landing-open-room__lead {
+        margin: 28px 0 38px;
+    }
+
+    .landing-open-room__visit {
+        grid-template-rows: minmax(400px, 1fr) auto;
+    }
+
+    .landing-open-room__visit-copy {
+        min-height: 390px;
+        padding-block: 42px;
     }
 
     .landing-lesson {

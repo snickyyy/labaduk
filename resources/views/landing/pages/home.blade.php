@@ -2,6 +2,5 @@
 
 @section('content')
     <x-landing.hero />
-    <x-landing.lesson-content />
-    <x-landing.timeline />
+    <x-landing.open-room />
 @endsection

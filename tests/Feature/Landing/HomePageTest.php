@@ -11,10 +11,10 @@ class HomePageTest extends TestCase
         $this->get('/en')
             ->assertOk()
             ->assertSee('<html lang="en">', false)
-            ->assertSee('The riff that')
-            ->assertSee('Technical notes')
-            ->assertSee('Course timeline')
-            ->assertSee('/images/landing/hero-512.webp', false)
+            ->assertSee('Come play')
+            ->assertSee('No experience needed')
+            ->assertSee('/images/landing/studio-room-1280.webp', false)
+            ->assertSee('/images/landing/open-room-1120.webp', false)
             ->assertDontSee('/api/');
     }
 
@@ -28,12 +28,12 @@ class HomePageTest extends TestCase
         $this->get('/de')
             ->assertOk()
             ->assertSee('<html lang="de">', false)
-            ->assertSee('Das Riff, das');
+            ->assertSee('Komm vorbei');
 
         $this->get('/ua')
             ->assertOk()
             ->assertSee('<html lang="ua">', false)
-            ->assertSee('Риф, який');
+            ->assertSee('Заходь');
     }
 
     public function test_language_selector_links_to_each_supported_locale(): void

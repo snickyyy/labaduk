@@ -6,9 +6,7 @@
             </a>
 
             <div class="landing-nav__links">
-                <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#archive">{{ __('landing.nav.archive') }}</a>
-                <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#gear">{{ __('landing.nav.gear') }}</a>
-                <a @class(['is-active' => request()->routeIs('landing.home')]) href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#lessons" @if(request()->routeIs('landing.home')) aria-current="page" @endif>{{ __('landing.nav.lessons') }}</a>
+                <a @class(['is-active' => request()->routeIs('landing.home')]) href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#the-room" @if(request()->routeIs('landing.home')) aria-current="page" @endif>{{ __('landing.nav.the_room') }}</a>
                 <a @class(['is-active' => request()->routeIs('landing.about')]) href="{{ route('landing.about', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.about')) aria-current="page" @endif>{{ __('landing.nav.about') }}</a>
                 <a @class(['is-active' => request()->routeIs('landing.visit-rules')]) href="{{ route('landing.visit-rules', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.visit-rules')) aria-current="page" @endif>{{ __('landing.nav.visit_rules') }}</a>
             </div>
@@ -44,9 +42,7 @@
                     </svg>
                 </summary>
                 <div class="landing-menu__panel">
-                    <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#archive">{{ __('landing.nav.archive') }}</a>
-                    <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#gear">{{ __('landing.nav.gear') }}</a>
-                    <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#lessons">{{ __('landing.nav.lessons') }}</a>
+                    <a href="{{ route('landing.home', ['locale' => app()->getLocale()]) }}#the-room">{{ __('landing.nav.the_room') }}</a>
                     <a href="{{ route('landing.about', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.about')) aria-current="page" @endif>{{ __('landing.nav.about') }}</a>
                     <a href="{{ route('landing.visit-rules', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.visit-rules')) aria-current="page" @endif>{{ __('landing.nav.visit_rules') }}</a>
                     <a href="{{ route('landing.appointments.create', ['locale' => app()->getLocale()]) }}" @if(request()->routeIs('landing.appointments.*')) aria-current="page" @endif>{{ __('landing.nav.book_visit') }}</a>
